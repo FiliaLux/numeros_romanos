@@ -26,14 +26,10 @@ def a_romanos(num:int) -> str:
 def int_a_romanos(num:int):
     dictionary = sorted(numeros_romanos.items(), key = lambda x: x[1], reverse = True)
     roman = ""
+    if num == 0:
+        roman = None
     for key, value in dictionary:
         while num >= value:
             roman += key
             num -= value
     return roman
-
-
-assert a_romanos(1) == "I"
-assert a_romanos(6) != "V"
-assert int_a_romanos(456) == "CDLVI"
-assert int_a_romanos(93) != "LXXXXIII"
