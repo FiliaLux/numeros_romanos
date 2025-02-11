@@ -1,3 +1,4 @@
+#Diccionario de números romanos clave y su respectivo valor
 numeros_romanos = {
     "I": 1,"IV": 4,"V": 5,"IX": 9,
     "X": 10,"XL": 40,"L": 50,"XC": 90,
@@ -5,6 +6,8 @@ numeros_romanos = {
     "M": 1000
 }
 
+#Primera función que devuelve el valor clave correspondiente 
+# al número de entrada
 def a_romanos(num:int) -> str:
     roman = ""
     for key, value in numeros_romanos.items():
@@ -12,6 +15,8 @@ def a_romanos(num:int) -> str:
             roman = key
     return roman
 
+#Función final que devuelve el número romano completo correspondiente 
+# al número de entrada
 def int_a_romanos(num:int):
     dictionary = sorted(numeros_romanos.items(), key = lambda x: x[1], reverse = True)
     roman = ""
