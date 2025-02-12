@@ -6,7 +6,7 @@ numeros_romanos = {
     "M": 1000
 }
 
-#Primera función que devuelve el valor clave correspondiente 
+#Primera función de prueba que devuelve el valor clave correspondiente 
 # al número de entrada
 def a_romanos(num:int) -> str:
     roman = ""
@@ -23,7 +23,7 @@ def int_a_romanos(num:int):
     if num == 0:
         roman = None
     for key, value in dictionary:
-        while num >= value:
+        while 3999 > num >= value:
             roman += key
             num -= value
     return roman
