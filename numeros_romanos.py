@@ -23,7 +23,7 @@ def int_a_romanos(num:int):
     if num == 0:
         roman = None
     for key, value in dictionary:
-        while 3999 > num >= value:
+        while 4000 > num >= value:
             roman += key
             num -= value
     return roman
