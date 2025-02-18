@@ -1,19 +1,28 @@
 import numeros_romanos
+import test_numeros_romanos
 
 num_symbols = ["+","-","*","/","**","(",")","%","="]
+
+class RomanNumeralError(Exception):
+    pass
 
 def romano_a_int(num:str):
     
     number = 0
     prev_number = 0
+    valid, needle = test_numeros_romanos.valid_roman_repetitions(num)
+    if not valid:
+        raise RomanNumeralError(f"{needle} is repeated more than admitted")
     
     for roman in reversed(num):
+        if roman not in numeros_romanos.numeros_romanos:
+            raise RomanNumeralError(f"{roman} is not a valid roman numeral")
         if prev_number > numeros_romanos.numeros_romanos[roman]:
             number -= numeros_romanos.numeros_romanos[roman]
-        else:
+        elif number + numeros_romanos.numeros_romanos[roman] < 4000:
             number += numeros_romanos.numeros_romanos[roman]
         prev_number = numeros_romanos.numeros_romanos[roman]
-    
+
     return number 
 
 def number_input():
