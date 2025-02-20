@@ -39,36 +39,49 @@ def in_strike(haystack:str,needle:str,strike:int):
         count = 0
     
     return count >= strike
-
+    
 def valid_roman_repetitions(roman:str):
     needle = ""
+    limit = 0
     valid = False
     for key in reversed(roman):
         if key in "IXCM":
             valid = in_strike(roman,key,4)
             if valid:
                 needle = key
+                limit = 4
                 break
-        else:
+        elif key in "VLD":
             valid = in_strike(roman,key,2)
             if valid:
                 needle = key
+                limit = 2
                 break
             else:
                 valid = False
                 needle = None
-    
-    return not valid, needle
+                limit = None
+    return not valid, needle, limit
 
 def test_valid_roman_repetitons():
-    assert valid_roman_repetitions("XVII") == (True,None)
-    assert valid_roman_repetitions("VV") == (False,"V")
-    assert valid_roman_repetitions("XXXX") == (False,"X")
-    assert valid_roman_repetitions("CCLXXXVIII") == (True,None)
+    assert valid_roman_repetitions("XVII") == (True,None,None)
+    assert valid_roman_repetitions("VV") == (False,"V",2)
+    assert valid_roman_repetitions("XXXX") == (False,"X",4)
+    assert valid_roman_repetitions("CCLXXXVIII") == (True,None,None)
 
 def test_exception_roman_repetitions():
     with pytest.raises(calc_num_romanos.RomanNumeralError) as context:
         calc_num_romanos.romano_a_int("CCLXXVIIII")
-    assert str(context.value).endswith(" repeated more than admitted")
-    
+    assert str(context.value).endswith("be repeated 3 times")
 
+def test_correct_subtractions():
+    with pytest.raises(calc_num_romanos.RomanNumeralError) as context:
+        calc_num_romanos.romano_a_int("XVX")
+    assert str(context.value).endswith("valid substraction")
+
+def test_repeated_substraction():
+    with pytest.raises(calc_num_romanos.RomanNumeralError):
+        assert calc_num_romanos.romano_a_int("XCXC")
+    with pytest.raises(calc_num_romanos.RomanNumeralError) as context:
+        assert calc_num_romanos.romano_a_int("XCXL")
+    assert str(context.value).endswith("can't be repeated")

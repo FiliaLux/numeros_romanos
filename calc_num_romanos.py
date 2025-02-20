@@ -10,18 +10,34 @@ def romano_a_int(num:str):
     
     number = 0
     prev_number = 0
-    valid, needle = test_numeros_romanos.valid_roman_repetitions(num)
+    valid, needle, limit = test_numeros_romanos.valid_roman_repetitions(num)
+    substracted = False
+    
     if not valid:
-        raise RomanNumeralError(f"{needle} is repeated more than admitted")
+        raise RomanNumeralError(f"{needle} {"can only be repeated 3 times" if limit == 4 else "can't be repeated"}")
     
     for roman in reversed(num):
         if roman not in numeros_romanos.numeros_romanos:
             raise RomanNumeralError(f"{roman} is not a valid roman numeral")
         if prev_number > numeros_romanos.numeros_romanos[roman]:
-            number -= numeros_romanos.numeros_romanos[roman]
+            if substracted == True and number > prev_number + numeros_romanos.numeros_romanos[roman]:
+                raise RomanNumeralError(f"Certain substractions can't be repeated")
+            if roman == "I" and prev_roman in "VX":
+                number -= numeros_romanos.numeros_romanos[roman]
+                substracted = True
+            elif roman == "X" and prev_roman in "LC":
+                number -= numeros_romanos.numeros_romanos[roman]
+                substracted = True
+            elif roman == "C" and prev_roman in "DM":
+                number -= numeros_romanos.numeros_romanos[roman]
+                substracted = True
+            else:
+                raise RomanNumeralError(f"{roman}{prev_roman} is not a valid substraction")
         elif number + numeros_romanos.numeros_romanos[roman] < 4000:
             number += numeros_romanos.numeros_romanos[roman]
+            substracted += False
         prev_number = numeros_romanos.numeros_romanos[roman]
+        prev_roman = roman
 
     return number 
 
