@@ -82,6 +82,8 @@ def test_correct_subtractions():
 def test_repeated_substraction():
     with pytest.raises(calc_num_romanos.RomanNumeralError):
         assert calc_num_romanos.romano_a_int("XCXC")
+    with pytest.raises(calc_num_romanos.RomanNumeralError):
+        assert calc_num_romanos.romano_a_int("XCX")
     with pytest.raises(calc_num_romanos.RomanNumeralError) as context:
         assert calc_num_romanos.romano_a_int("XCXL")
     assert str(context.value).endswith("can't be admitted")
