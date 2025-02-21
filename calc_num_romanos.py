@@ -34,10 +34,7 @@ def romano_a_int(num:str):
         prev_number = numeros_romanos.numeros_romanos[roman]
         prev_roman = roman
 
-    return number 
-
-def new_func():
-    substracted = True
+    return number
 
 def number_input():
     
