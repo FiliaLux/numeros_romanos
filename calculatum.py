@@ -1,7 +1,5 @@
 from calc_num_romanos import romano_a_int
 import numeros_romanos
-import test_numeros_romanos
-import pytest
 
 num_romanos = numeros_romanos.numeros_romanos.items()
 operators = {"1": "+", "2": "-", "3": "x", "4": "%"}
@@ -30,21 +28,19 @@ def calculatum_input():
     elif not is_valid(number_2) and not is_valid(romano_a_int(number_2)):
         print(f"This is not a valid second number, try again:\n{number_2}")
     
-    number_1 = int(number_1) if is_valid(number_1) else romano_a_int(number_1)
-    number_2 = int(number_2) if is_valid(number_2) else romano_a_int(number_2)
+    inumber_1 = int(number_1) if is_valid(number_1) else romano_a_int(number_1)
+    inumber_2 = int(number_2) if is_valid(number_2) else romano_a_int(number_2)
     
     for num, symbol in operators.items():
         if operation == num:
             print(f"{number_1} {symbol} {number_2} = ")
         if operation == "1":
-            result = number_1 + number_2
+            result = inumber_1 + inumber_2
         elif operation == "2":
-            result = number_1 - number_2
+            result = inumber_1 - inumber_2
         elif operation == "3":
-            result = number_1 * number_2
+            result = inumber_1 * inumber_2
         elif operation == "4":
-            result = number_1 / number_2
+            result = inumber_1 / inumber_2
     
-    print(f"Total: {result}")
-        
-
+    print(f"Total: {result} or {numeros_romanos.int_a_romanos(result)}")
