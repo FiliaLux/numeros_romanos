@@ -1,7 +1,45 @@
 import numeros_romanos
-import test_numeros_romanos
 
 num_symbols = ["+","-","*","/","**","(",")","%","="]
+
+def in_strike(haystack:str,needle:str,strike:int):
+    count = 0
+    if len(haystack) >= strike:
+        for item in haystack:
+            if item == needle:
+                count += 1
+                if count == strike:
+                    break
+            else:
+                count = 0
+    else:
+        count = 0
+    
+    return count >= strike
+
+def valid_roman_repetitions(roman:str):
+    needle = ""
+    limit = 0
+    valid = False
+    for key in reversed(roman):
+        if key in "IXCM":
+            valid = in_strike(roman,key,4)
+            if valid:
+                needle = key
+                limit = 4
+                break
+        elif key in "VLD":
+            valid = in_strike(roman,key,2)
+            if valid:
+                needle = key
+                limit = 2
+                break
+            else:
+                valid = False
+                needle = None
+                limit = None
+    
+    return not valid, needle, limit
 
 class RomanNumeralError(Exception):
     pass
@@ -10,7 +48,7 @@ def romano_a_int(num:str):
     
     number = 0
     prev_number = 0
-    valid, needle, limit = test_numeros_romanos.valid_roman_repetitions(num)
+    valid, needle, limit = valid_roman_repetitions(num)
     
     if not valid:
         raise RomanNumeralError(f"{needle} {"can only be repeated 3 times" if limit == 4 else "can't be repeated"}")
@@ -103,3 +141,5 @@ def calculator(operation:str):
                     result -= nums[i+1]
             elif operator == "=":
                 print(f"{int(result)} or {numeros_romanos.int_a_romanos(result)}")
+
+calculator("X+II/II*III=")
