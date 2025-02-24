@@ -141,5 +141,3 @@ def calculator(operation:str):
                     result -= nums[i+1]
             elif operator == "=":
                 print(f"{int(result)} or {numeros_romanos.int_a_romanos(result)}")
-
-calculator("X+II/II*III=")

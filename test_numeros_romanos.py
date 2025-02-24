@@ -2,6 +2,7 @@ import numeros_romanos
 from calc_num_romanos import romano_a_int
 from calc_num_romanos import RomanNumeralError
 from calc_num_romanos import valid_roman_repetitions
+from class_roman_numbers import RomanNumber
 import pytest
 
 #Pruebas para ejecutar con pytest del coversor de entero a romano
@@ -52,14 +53,17 @@ def test_repeated_substraction():
         assert romano_a_int("XCXL")
     assert str(context.value).endswith("can't be admitted")
 
-class RomanNumber:
-    
-    def __init__(self,num:int|str):
-        
-        self.value = num if int(num) else romano_a_int(num)
-        self.key = numeros_romanos.int_a_romanos(num) if int(num) else num
-
 def test_roman_number_class():
+    
     rn = RomanNumber(8)
     assert rn.value == 8
     assert rn.key == "VIII"
+
+def test_roman_number_class_operations():
+
+    a = RomanNumber("V")
+    b = RomanNumber(7)
+
+    assert a + b == "XII"
+    assert a + 3 == "VIII"
+    assert b + "IV" == "XI"
