@@ -1,10 +1,10 @@
 from numeros_romanos import int_a_romanos
 from calc_num_romanos import romano_a_int
+from calc_num_romanos import RomanNumeralError
 
 class RomanNumber():
 
     def __init__(self,num):
-        
         self.value = num if isinstance(num,int) else romano_a_int(num)
         self.key = num if isinstance(num,str) else int_a_romanos(num)
 
@@ -15,10 +15,8 @@ class RomanNumber():
         return self.__str__()
 
     def __eq__(self, other):
-        
         if not isinstance(other, RomanNumber):
             return False
-        
         else:
             return self.value == other.value
 
@@ -40,38 +38,80 @@ class RomanNumber():
     def __ne__(self, other): #not equal
         pass
 
-    def __add__(self, other):
-
+    def __radd__(self, other):
+        return self.__add__(other)
+    
+    def __rmul__(self, other):
+        return self.__mul__(other)
+    
+    def __add__(self, other): #sum method // doesn't allow negative result
+        sum = 0
         if isinstance(other, RomanNumber):
-            
-            return int_a_romanos(self.value + other.value)
-
+            if other.value < 0:
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome")
+            sum = self.value + other.value
         elif isinstance(other, int):
-            
-            return int_a_romanos(self.value + other)
-
+            if other < 0: 
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome")
+            sum = self.value + other
         elif isinstance(other, str):
-
-            return int_a_romanos(self.value + romano_a_int(other))
-        
+            if romano_a_int(other) < 0:
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome.")
+            sum = self.value + romano_a_int(other)
         else:
-            
             raise TypeError(f"unsupported operation '+' between 'RomanNumber' and '{other.__class__}' type.")
+        return self.__class__(sum)
 
-    def __substract__(self, other):
-
-        if isinstance(other, RomanNumber):
-
-            return int_a_romanos(self.value - other.value)
-
-        elif isinstance(other, int):
-            
-            return int_a_romanos(self.value - other)
-
-        elif isinstance(other, str):
-
-            return int_a_romanos(self.value - romano_a_int(other))
-        
+    def __sub__(self, other): #subtraction // doesn't allow negative result
+        sub = 0
+        if isinstance(other, RomanNumber): 
+            if other.value > self.value:
+                raise RomanNumeralError(f"Second value {other.value} can't be lower than {self.value}, can't expect negative outcome")
+            sub = self.value - other.value
+        elif isinstance(other, int) and other < self.value:
+            if other > self.value:
+                raise RomanNumeralError(f"Second value {other} can't be lower than {self.value}, can't expect negative outcome")
+            sub = self.value - other
+        elif isinstance(other, str) and romano_a_int(other) < self.value:
+            if romano_a_int(other) > self.value:
+                raise RomanNumeralError(f"Second value {other} can't be lower than {self.value}, can't expect negative outcome")
+            sub = self.value - romano_a_int(other)
         else:
-            
             raise TypeError(f"unsupported operation '-' between 'RomanNumber' and '{other.__class__}' type.")
+        return self.__class__(sub)
+
+    def __mul__(self, other): #multiplication // doesn't allow negative result
+        mul = 0
+        if isinstance(other, RomanNumber):
+            if other.value < 0:
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome")
+            mul = self.value * other.value
+        elif isinstance(other, int):
+            if other < 0: 
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome")
+            mul = self.value * other
+        elif isinstance(other, str):
+            if romano_a_int(other) < 0:
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome.")
+            mul = self.value * romano_a_int(other)
+        else:
+            raise TypeError(f"unsupported operation '*' between 'RomanNumber' and '{other.__class__}' type.")
+        return self.__class__(mul)
+
+    def __truediv__(self, other): #division // doesn't allow negative result
+        div = 0
+        if isinstance(other, RomanNumber):
+            if other.value < 0:
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome")
+            div = round(self.value / other.value, 0)
+        elif isinstance(other, int):
+            if other < 0: 
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome")
+            div = round(self.value / other, 0)
+        elif isinstance(other, str):
+            if romano_a_int(other) < 0:
+                raise RomanNumeralError(f"Second value {other} can't be lower than 0, can't expect negative outcome.")
+            div = round(self.value / romano_a_int(other), 0)
+        else:
+            raise TypeError(f"unsupported operation '/' between 'RomanNumber' and '{other.__class__}' type.")
+        return self.__class__(int(div))
