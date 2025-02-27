@@ -1,17 +1,11 @@
-import numeros_romanos
-from calc_num_romanos import romano_a_int
-from calc_num_romanos import RomanNumeralError
-from calc_num_romanos import valid_roman_repetitions
-from class_roman_numbers import RomanNumber
+from calculatum.roman_numbers import RomanNumber, romano_a_int, int_a_romanos, valid_roman_repetitions, RomanNumeralError
 import pytest
 
 #Pruebas para ejecutar con pytest del coversor de entero a romano
 def test_correct_roman_conversion():
-    assert numeros_romanos.a_romanos(1) == "I"
-    assert numeros_romanos.a_romanos(6) != "V"
-    assert numeros_romanos.int_a_romanos(456) == "CDLVI"
-    assert numeros_romanos.int_a_romanos(93) != "LXXXXIII"
-    assert numeros_romanos.int_a_romanos(0) == None
+    assert int_a_romanos(456) == "CDLVI"
+    assert int_a_romanos(93) != "LXXXXIII"
+    assert int_a_romanos(0) == None
 
 #Pruebas del conversor de romano a entero
 def test_correct_int_conversion():
@@ -94,4 +88,4 @@ def test_class_sub_exception():
         
         a - b
     
-    assert str(context.value).endswith("negative outcome.")
+    assert str(context.value).endswith("negative outcome")

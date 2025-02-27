@@ -1,7 +1,127 @@
-from numeros_romanos import int_a_romanos
-from calc_num_romanos import romano_a_int
-from calc_num_romanos import RomanNumeralError
+# Diccionario de caracteres romanos
+numeros_romanos = {
+    "I": 1,"IV": 4,"V": 5,"IX": 9,
+    "X": 10,"XL": 40,"L": 50,"XC": 90,
+    "C": 100,"CD": 400,"D": 500,"CM": 900,
+    "M": 1000
+}
 
+# Función de conversión de int a romano mediante diccionario
+def int_a_romanos(num:int):
+    dictionary = sorted(numeros_romanos.items(), key = lambda x: x[1], reverse = True)
+    roman = ""
+    if num == 0:
+        roman = None
+    for key, value in dictionary:
+        while 4000 > num >= value:
+            roman += key
+            num -= value
+    if num > 3999:
+         roman = long_number_calc(num)
+    return roman
+
+#Función que recibe numeros grandes y los devuelve en romanos 
+# con asteriscos según millares
+def long_number_calc(num):
+    number = ""
+    num_roman = []
+    roman = ""
+    #Añadimos los dos ceros en caso de quedar 
+    # alguna cifra fuera de las tripletas para incluirla
+    num = "00" + str(num) 
+    #Cogemos la lista en reverso de tres en tres devolviendo 
+    # el indice de posicion de cada final de tripleta
+    for i in range(len(num)-1,-1,-3):
+        number += num[i-2:i+1] # Sumamos a la cadena number la agrupación de tres segun la posicion del indice
+    # Creamos una lista con esta cadena en grupos de tres
+    for i in range(0,len(number),3): 
+        num_roman.append(number[i:i+3])
+    #Le damos la vuelta y devolvemos la conversión a romanos de cada
+    # elemento en el orden correspondiente y con asteriscos segun indice
+    for i in range(len(num_roman)-1,-1,-1): 
+        if int(num_roman[i]) != 0:
+            roman += int_a_romanos(int(num_roman[i]))  + ("*" * i)
+        else:
+            roman += ""
+    return roman
+
+# Función que determina si un elemento está en racha
+def in_strike(haystack:str,needle:str,strike:int):
+    count = 0
+    if len(haystack) >= strike:
+        for item in haystack:
+            if item == needle:
+                count += 1
+                if count == strike:
+                    break
+            else:
+                count = 0
+    else:
+        count = 0
+    
+    return count >= strike
+
+# Función que comprueba repeticiones válidas de números romanos
+def valid_roman_repetitions(roman:str):
+    needle = ""
+    limit = 0
+    valid = False
+    for key in reversed(roman):
+        if key in "IXCM":
+            valid = in_strike(roman,key,4)
+            if valid:
+                needle = key
+                limit = 4
+                break
+        elif key in "VLD":
+            valid = in_strike(roman,key,2)
+            if valid:
+                needle = key
+                limit = 2
+                break
+            else:
+                valid = False
+                needle = None
+                limit = None
+    
+    return not valid, needle, limit
+
+# Definición del error: RomanNumeralError
+class RomanNumeralError(Exception):
+    pass
+
+# Conversión de número romano de tipo cadena a int
+def romano_a_int(num:str):
+    
+    number = 0
+    prev_number = 0
+    valid, needle, limit = valid_roman_repetitions(num)
+    
+    if not valid:
+        raise RomanNumeralError(f"{needle} {"can only be repeated 3 times" if limit == 4 else "can't be repeated"}")
+    
+    for roman in reversed(num):
+        if roman not in numeros_romanos:
+            raise RomanNumeralError(f"{roman} is not a valid roman numeral")
+        if prev_number > numeros_romanos[roman]:
+            if number >= prev_number + numeros_romanos[roman]:
+                raise RomanNumeralError(f"Certain operations can't be admitted")
+            if roman == "I" and prev_roman in "VX":
+                number -= numeros_romanos[roman]
+            elif roman == "X" and prev_roman in "LC":
+                number -= numeros_romanos[roman]
+            elif roman == "C" and prev_roman in "DM":
+                number -= numeros_romanos[roman]
+            else:
+                raise RomanNumeralError(f"{roman}{prev_roman} is not a valid substraction")
+        elif number + numeros_romanos[roman] < 4000:
+            number += numeros_romanos[roman]
+        prev_number = numeros_romanos[roman]
+        prev_roman = roman
+
+    return number
+
+# Clase de números romanos
 class RomanNumber():
 
     def __init__(self,num):

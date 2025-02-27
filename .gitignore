@@ -4,3 +4,4 @@
 **venv/
 **.vscode/
 **testfile.py
+**__init__.py/
