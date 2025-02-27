@@ -1,6 +1,6 @@
 import numeros_romanos
 
-num_symbols = ["+","-","*","/","**","(",")","%","="]
+num_symbols = ["+","-","*","/","%","="]
 
 def in_strike(haystack:str,needle:str,strike:int):
     count = 0
@@ -141,3 +141,4 @@ def calculator(operation:str):
                     result -= nums[i+1]
             elif operator == "=":
                 print(f"{int(result)} or {numeros_romanos.int_a_romanos(result)}")
+                
