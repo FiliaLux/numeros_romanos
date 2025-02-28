@@ -1,7 +1,6 @@
-from calc_num_romanos import romano_a_int
-import numeros_romanos
+from calculatum.roman_numbers import numeros_romanos, romano_a_int, int_a_romanos
 
-num_romanos = numeros_romanos.numeros_romanos.items()
+num_romanos = numeros_romanos.items()
 operators = {"1": "+", "2": "-", "3": "x", "4": "%"}
 
 class InputError(Exception):
@@ -43,4 +42,4 @@ def calculatum_input():
         elif operation == "4":
             result = inumber_1 / inumber_2
     
-    print(f"Total: {result} or {numeros_romanos.int_a_romanos(result)}")
+    print(f"Total: {result} or {int_a_romanos(result)}")
